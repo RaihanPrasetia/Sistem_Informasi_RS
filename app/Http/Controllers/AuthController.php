@@ -3,62 +3,44 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User; // Pastikan model User diimpor
 
 class AuthController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the login form.
      */
     public function index()
     {
-        //
+        return view('auth.login'); // Menampilkan halaman login
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Handle login request.
      */
-    public function create()
+    public function login(Request $request)
     {
-        //
-    }
+        // Validasi input
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Cari user berdasarkan username
+        $user = User::where('username', $request->username)->first();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if ($user && Hash::check($request->password, $user->password)) {
+            // Jika username dan password cocok
+            Auth::login($user); // Login user
+            $request->session()->regenerate(); // Regenerasi session
+            return redirect()->route('dashboard.index'); // Arahkan ke dashboard
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        // Jika gagal login
+        return back()->withErrors([
+            'Error' => 'Username atau password salah.',
+        ])->onlyInput('username');
     }
 }

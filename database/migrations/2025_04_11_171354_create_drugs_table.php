@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('drugs', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
+            $table->string('name'); // Nama obat
+            $table->string('type'); // Jenis obat (misalnya: tablet, kapsul, sirup)
+            $table->integer('stock'); // Stok obat
+            $table->decimal('price', 10, 2); // Harga obat
+            $table->text('description')->nullable(); // Deskripsi obat jika diperlukan
             $table->timestamps();
         });
     }

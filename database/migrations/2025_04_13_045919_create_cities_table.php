@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('countries', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id()->primary();
-            $table->string('name'); // Nama negara
-            $table->string('phone_code', 5)->nullable(); // Kode telepon negara (misalnya: +62)
+            $table->string('name'); // Nama kota
+            $table->foreignId('state_id')->constrained('states')->onDelete('cascade'); // Relasi ke tabel countries
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('countries');
+        Schema::dropIfExists('cities');
     }
 };

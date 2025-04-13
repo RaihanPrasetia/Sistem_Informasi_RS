@@ -1,3 +1,4 @@
+<!-- filepath: d:\Kerja\SI_Rumah_Sakit\resources\views\auth\login.blade.php -->
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -12,7 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-lg">
         <div class="text-center mb-6">
             <img src="{{ asset('images/logo/logo.png') }}" alt="Logo" class="mx-auto h-16 w-16 mb-4">
@@ -21,7 +22,18 @@
                 Masukkan kredensial Anda untuk mengakses sistem
             </p>
         </div>
-        <form action="{{ route('login') }}" method="POST">
+
+        <!-- Alert Error -->
+        @if ($errors->has('Error'))
+            <div class="mb-4">
+                <span class="block text-sm text-center text-red-500 bg-red-100 p-2 rounded">
+                    {{ $errors->first('Error') }}
+                </span>
+            </div>
+        @endif
+
+        <!-- Form Login -->
+        <form action="{{ route('login.post') }}" method="POST">
             @csrf
             <div class="mb-6">
                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>

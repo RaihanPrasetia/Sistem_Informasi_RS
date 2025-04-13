@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->string('name');
-            $table->string('address')->unique();
-            $table->string('phone')->unique();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             $table->string('username')->unique();
             $table->string('password');
             $table->string('role')->default('user'); // Default role is 'user'
@@ -24,7 +24,7 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->string('username')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });

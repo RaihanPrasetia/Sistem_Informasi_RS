@@ -6,15 +6,15 @@ use App\Http\Controllers\DrugController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 // Grup rute dengan middleware auth
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('/dashboard', DashboardController::class);
 
-    Route::get('/drug', [DrugController::class, 'index'])->name('drug.index');
+    Route::resource('/drug', DrugController::class);
 
     Route::get('/profile', function () {
         return view('profile'); // Ganti dengan view profile Anda

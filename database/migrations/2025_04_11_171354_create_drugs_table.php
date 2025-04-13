@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('drugs', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->uuid('id')->primary()->uniqid(); // ID unik untuk setiap obat
             $table->string('name'); // Nama obat
             $table->string('type'); // Jenis obat (misalnya: tablet, kapsul, sirup)
             $table->integer('stock'); // Stok obat

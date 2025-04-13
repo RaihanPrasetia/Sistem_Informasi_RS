@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('registration_drugs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('registration_id')->constrained('registrations')->onDelete('cascade'); // Relasi ke tabel registrations
-            $table->foreignId('drug_id')->constrained('drugs')->onDelete('cascade'); // Relasi ke tabel drugs
+            $table->uuid('drug_id'); // Menggunakan UUID untuk relasi ke tabel drugs
+            $table->foreign('drug_id')->references('id')->on('drugs')->onDelete('cascade'); // Relasi ke tabel drugs
             $table->integer('quantity'); // Jumlah obat
             $table->string('dosage'); // Dosis obat
             $table->timestamps();

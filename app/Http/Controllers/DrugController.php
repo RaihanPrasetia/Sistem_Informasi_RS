@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Drug;
 use Illuminate\Http\Request;
 
 class DrugController extends Controller
@@ -9,9 +10,17 @@ class DrugController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('drug.index');
+        $perPage = $request->input('perPage', 5); // Default 10 data per halaman
+        $search = $request->input('search'); // Parameter pencarian
+
+        $drugs = Drug::when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('type', 'like', "%{$search}%");
+        })->paginate($perPage)->appends(['search' => $search, 'perPage' => $perPage]);
+
+        return view('drug.index', compact('drugs'));
     }
 
     /**
@@ -33,9 +42,10 @@ class DrugController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $drug = Drug::findOrFail($id);
+        return response()->json($drug);
     }
 
     /**
@@ -49,9 +59,11 @@ class DrugController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $drug = Drug::findOrFail($id);
+        $drug->update($request->all());
+        return redirect()->route('drug.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     /**
@@ -59,6 +71,8 @@ class DrugController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $drug = Drug::findOrFail($id); // Cari drug berdasarkan ID
+        $drug->delete(); // Hapus drug
+        return redirect()->route('drug.index')->with('success', 'Data berhasil dihapus.');
     }
 }

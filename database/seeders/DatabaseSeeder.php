@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'test01',
             'password' => Hash::make('12345678'),
         ]);
+
+        // Call DrugSeeder
+        $this->call(DrugSeeder::class);
     }
 }

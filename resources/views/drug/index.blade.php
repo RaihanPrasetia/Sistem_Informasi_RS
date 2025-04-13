@@ -25,13 +25,13 @@
         </div>
 
         <!-- Add Modal -->
-        @include('components.drug.add')
+        @include('components.modal.drug.add')
 
         <!-- Modal Lihat -->
-        @include('components.drug.show')
+        @include('components.modal.drug.show')
 
         <!-- Modal Edit -->
-        @include('components.drug.edit')
+        @include('components.modal.drug.edit')
 
         <!-- Tabel Data Drug -->
         <div class="overflow-x-auto p-6 bg-white shadow-md rounded-lg">

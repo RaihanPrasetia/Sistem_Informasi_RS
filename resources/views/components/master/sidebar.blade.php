@@ -7,7 +7,7 @@
             @php
                 $menus = [
                     ['name' => 'Dashboard', 'route' => route('dashboard.index'), 'icon' => 'fa-solid fa-house'],
-                    ['name' => 'User', 'route' => '#', 'icon' => 'fa-solid fa-user'],
+                    ['name' => 'User', 'route' => route('patient.index'), 'icon' => 'fa-solid fa-user'],
                     ['name' => 'Pegawai', 'route' => '#', 'icon' => 'fa-solid fa-users'],
                     ['name' => 'Wilayah', 'route' => '#', 'icon' => 'fa-solid fa-map'],
                     ['name' => 'Pelayanan', 'route' => '#', 'icon' => 'fa-solid fa-stethoscope'],

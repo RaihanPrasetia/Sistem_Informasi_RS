@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DrugController;
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -12,9 +13,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 // Grup rute dengan middleware auth
 Route::middleware(['auth'])->group(function () {
 
-    Route::resource('/dashboard', DashboardController::class);
-
-    Route::resource('/drug', DrugController::class);
+    Route::resource('dashboard', DashboardController::class);
+    Route::resource('patient', PatientController::class);
+    Route::resource('drug', DrugController::class);
 
     Route::get('/profile', function () {
         return view('profile'); // Ganti dengan view profile Anda

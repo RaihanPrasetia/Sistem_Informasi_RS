@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->uuid('id')->primary()->uniqid(); // ID unik untuk setiap pasien
+            $table->string('name'); // Nama pasien
+            $table->string('nik')->unique(); // Nomor Induk Kependudukan (NIK) pasien
+            $table->string('patient_number')->unique(); // Nomor Patient
+            $table->string('gender'); // Jenis kelamin (Laki-laki/Perempuan)
+            $table->date('birth_date'); // Tanggal lahir
+            $table->string('address'); // Alamat pasien
+            $table->string('phone')->nullable(); // Nomor telepon (opsional)
+            $table->timestamps(); // Kolom created_at dan updated_at
         });
     }
 

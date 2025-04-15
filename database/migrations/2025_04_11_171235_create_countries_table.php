@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->uuid('id')->primary()->uniqid(); // ID unik untuk setiap negara
             $table->string('name'); // Nama negara
-            $table->string('phone_code', 5)->nullable(); // Kode telepon negara (misalnya: +62)
             $table->timestamps();
         });
     }

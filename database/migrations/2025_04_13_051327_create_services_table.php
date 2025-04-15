@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('services', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->uuid('id')->primary()->uniqid(); // ID unik untuk setiap pelayanan
             $table->string('name'); // Nama pelayanan (misalnya: Periksa Umum, Cek Laboratorium)
             $table->string('description')->nullable(); // Deskripsi pelayanan
             $table->decimal('price', 10, 2); // Harga pelayanan
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel staff
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel staff
             $table->timestamps();
         });
     }

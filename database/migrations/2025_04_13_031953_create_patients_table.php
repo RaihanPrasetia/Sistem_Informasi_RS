@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('patient_number')->unique(); // Nomor Patient
             $table->string('gender'); // Jenis kelamin (Laki-laki/Perempuan)
             $table->date('birth_date'); // Tanggal lahir
+            $table->integer('age'); // Tempat lahir
             $table->string('address'); // Alamat pasien
             $table->string('phone')->nullable(); // Nomor telepon (opsional)
             $table->timestamps(); // Kolom created_at dan updated_at

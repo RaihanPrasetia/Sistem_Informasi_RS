@@ -7,10 +7,13 @@
             @php
                 $menus = [
                     ['name' => 'Dashboard', 'route' => route('dashboard.index'), 'icon' => 'fa-solid fa-house'],
+                    ['name' => 'Pendaftaran', 'route' => route('register.index'), 'icon' => 'fa-solid fa-file-alt'],
+                    ['name' => 'Transaksi', 'route' => '#', 'icon' => 'fa-solid fa-users'],
+                    ['name' => 'Peresepan', 'route' => route('peresepan.index'), 'icon' => 'fa-solid fa-users'],
                     ['name' => 'Pasien', 'route' => route('patient.index'), 'icon' => 'fa-solid fa-user'],
                     ['name' => 'Pegawai', 'route' => '#', 'icon' => 'fa-solid fa-users'],
-                    ['name' => 'Wilayah', 'route' => '#', 'icon' => 'fa-solid fa-map'],
-                    ['name' => 'Pelayanan', 'route' => '#', 'icon' => 'fa-solid fa-stethoscope'],
+                    ['name' => 'Wilayah', 'route' => route('country.index'), 'icon' => 'fa-solid fa-map'],
+                    ['name' => 'Pelayanan', 'route' => route('service.index'), 'icon' => 'fa-solid fa-stethoscope'],
                     ['name' => 'Obat', 'route' => route('drug.index'), 'icon' => 'fa-solid fa-pills'],
                 ];
             @endphp

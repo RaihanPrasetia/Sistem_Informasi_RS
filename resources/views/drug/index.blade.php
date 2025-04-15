@@ -10,15 +10,23 @@
             <!-- Success -->
             @if (session('success'))
                 <div id="successMessage"
-                    class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg transform translate-x-full transition-transform duration-500 ease-in-out">
+                    class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg transform transition-transform duration-500 ease-in-out">
                     {{ session('success') }}
+                </div>
+            @endif
+            <!-- Error -->
+            @if (session('error'))
+                <div id="errorMessage"
+                    class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg transform transition-transform duration-500 ease-in-out">
+                    {{ session('error') }}
                 </div>
             @endif
 
             <!-- Add Drug Button -->
             <div class="flex w-full items-center justify-end">
-                <button id="addDrugButton"
-                    class="flex items-center px-4 py-2 text-wrap bg-green-400 text-white font-semibold rounded-md hover:bg-green-600">
+                <!-- Tombol Tambah Drug -->
+                <button data-open-modal="addDrugModal"
+                    class="flex items-center px-4 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
                     <i class="fas fa-plus mr-2"></i> Tambah Drug
                 </button>
             </div>
@@ -60,40 +68,44 @@
                         class="px-4 py-2 font-semibold bg-blue-400 text-white rounded-r-md hover:bg-blue-500">Cari</button>
                 </form>
             </div>
-            <table class="min-w-full border-gray-200 border">
-                <thead class="text-slate-600 border-b border-gray-200 bg-gray-50">
+            <table>
+                <thead>
                     <tr>
-                        <th class="px-4 py-2 text-left">#</th>
-                        <th class="px-4 py-2 text-left">Nama</th>
-                        <th class="px-4 py-2 text-left">Jenis</th>
-                        <th class="px-4 py-2 text-left">Stok</th>
-                        <th class="px-4 py-2 text-left">Harga</th>
-                        <th class="px-4 py-2 text-left">Deskripsi</th>
-                        <th class="px-4 py-2 text-center">Aksi</th>
+                        <th>#</th>
+                        <th>Nama</th>
+                        <th>Jenis</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                        <th>Deskripsi</th>
+                        <th>
+                            <p class="text-center">Aksi</p>
+                        </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
+                <tbody>
                     @forelse ($drugs as $drug)
-                        <tr class="hover:bg-gray-100">
-                            <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                            <td class="px-4 py-2">{{ $drug->name }}</td>
-                            <td class="px-4 py-2">{{ $drug->type }}</td>
-                            <td class="px-4 py-2">{{ $drug->stock }}</td>
-                            <td class="px-4 py-2">Rp. {{ number_format($drug->price, 0, ',', '.') }}</td>
-                            <td class="px-4 py-2">{{ $drug->description }}</td>
-                            <td class="px-4 py-2">
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $drug->name }}</td>
+                            <td>{{ $drug->type }}</td>
+                            <td>{{ $drug->stock }}</td>
+                            <td>Rp. {{ number_format($drug->price, 0, ',', '.') }}</td>
+                            <td>{{ $drug->description }}</td>
+                            <td>
                                 <div class="flex space-x-2 items-center justify-center">
                                     <!-- Tombol Lihat -->
-                                    <a href="javascript:void(0)" onclick="openViewModal({{ $drug }})"
+                                    <button type="button" data-open-modal="viewDrugModal"
+                                        onclick="openViewModal({{ $drug }})"
                                         class="px-2 py-1 bg-blue-400 text-white rounded-md hover:bg-blue-500">
                                         <i class="fas fa-eye"></i>
-                                    </a>
+                                    </button>
 
                                     <!-- Tombol Edit -->
-                                    <a href="javascript:void(0)" onclick="openEditModal({{ $drug }})"
+                                    <button type="button" data-open-modal="editDrugModal"
+                                        onclick="openEditDrugModal({{ $drug }})"
                                         class="px-2 py-1 bg-yellow-400 text-white rounded-md hover:bg-yellow-500">
                                         <i class="fas fa-edit"></i>
-                                    </a>
+                                    </button>
 
                                     <!-- Tombol Delete -->
                                     <button type="button"

@@ -13,3 +13,32 @@
 body {
     @apply bg-gray-100 min-h-screen;
 }
+
+table {
+    @apply min-w-full border-gray-200 border;
+}
+
+thead {
+    @apply text-white border-b border-gray-200 bg-blue-400;
+}
+
+thead tr th,
+tbody tr td {
+    @apply px-4 py-2 text-left text-lg;
+}
+
+tbody {
+    @apply divide-y divide-gray-200;
+}
+
+tbody tr:nth-child(even) {
+    @apply bg-gray-50;
+}
+
+tbody tr:hover:nth-child(even) {
+    @apply bg-gray-100;
+}
+
+tbody tr:hover {
+    @apply bg-blue-50;
+}

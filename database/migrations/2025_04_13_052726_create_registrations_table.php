@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users (pasien)
-            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users (dokter)
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade'); // Relasi ke tabel services
+            $table->uuid('patient_id'); // Kolom patient_id bertipe UUID
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+            $table->uuid('service_id'); // Kolom service_id bertipe UUID
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade'); // Relasi ke tabel services
             $table->dateTime('registration_date'); // Tanggal pendaftaran
             $table->text('notes')->nullable(); // Catatan tambahan
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users (staf yang membuat)

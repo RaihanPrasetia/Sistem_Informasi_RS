@@ -15,9 +15,17 @@
                 </div>
             @endif
 
+            <!-- Error -->
+            @if (session('error'))
+                <div id="errorMessage"
+                    class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg transform translate-x-full transition-transform duration-500 ease-in-out">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <!-- Add Patient Button -->
             <div class="flex w-full items-center justify-end">
-                <button id="addPatientButton"
+                <button data-open-modal="addPatientModal"
                     class="flex items-center px-4 py-2 text-wrap bg-green-400 text-white font-semibold rounded-md hover:bg-green-600">
                     <i class="fas fa-plus mr-2"></i> Tambah Pasien
                 </button>
@@ -85,16 +93,18 @@
                             <td class="px-4 py-2">
                                 <div class="flex space-x-2 items-center justify-center">
                                     <!-- Tombol Lihat -->
-                                    <a href="javascript:void(0)" onclick="openViewModal({{ $patient }})"
+                                    <button type="button" data-open-modal="viewPatientModal"
+                                        onclick="openViewPatientModal({{ $patient }})"
                                         class="px-2 py-1 bg-blue-400 text-white rounded-md hover:bg-blue-500">
                                         <i class="fas fa-eye"></i>
-                                    </a>
+                                    </button>
 
                                     <!-- Tombol Edit -->
-                                    <a href="javascript:void(0)" onclick="openEditModal({{ $patient }})"
+                                    <button type="button" data-open-modal="editPatientModal"
+                                        onclick="openEditPatientModal({{ $patient }})"
                                         class="px-2 py-1 bg-yellow-400 text-white rounded-md hover:bg-yellow-500">
                                         <i class="fas fa-edit"></i>
-                                    </a>
+                                    </button>
 
                                     <!-- Tombol Delete -->
                                     <button type="button"

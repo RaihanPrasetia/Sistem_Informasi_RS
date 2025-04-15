@@ -36,7 +36,20 @@ class DrugController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:50',
+            'stock' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ]);
+
+        // Simpan data drug ke database
+        Drug::create($validated);
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('drug.index')->with('success', 'Drug berhasil ditambahkan.');
     }
 
     /**

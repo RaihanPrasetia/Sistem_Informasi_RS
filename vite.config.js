@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/custom.js',
                 'resources/js/patient/modal.js',
+                'resources/js/country/modal.js',
             ],
             refresh: true,
         }),

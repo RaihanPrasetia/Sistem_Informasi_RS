@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('states', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade'); // Relasi ke tabel countries
+            $table->uuid('id')->primary()->uniqid(); // ID unik untuk setiap provinsi
+            $table->uuid('country_id'); // Menggunakan UUID untuk relasi ke tabel countries
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade'); // Relasi ke tabel countries
             $table->string('name'); // Nama provinsi
             $table->timestamps();
         });

@@ -10,6 +10,7 @@ use App\Http\Controllers\PeresepanController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,6 +37,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/api/registration/{id}/drugs', [PeresepanController::class, 'getDrugs']);
     Route::resource('peresepan', PeresepanController::class)->except(['show']);
+
+    Route::resource('transaction', TransactionController::class);
+
 
 
     Route::get('/profile', function () {

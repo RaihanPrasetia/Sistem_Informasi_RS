@@ -110,12 +110,77 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('editServiceModal').classList.remove('hidden');
     }
 
+    function openUpdateModal(registrationId, patientName, serviceName) {
+        const modal = document.getElementById('updateResepModal');
+        const registrationIdInput = document.getElementById('updateRegistrationId');
+        const modalPatientName = document.getElementById('updateModalPatientName');
+        const modalServiceName = document.getElementById('updateModalServiceName');
+        const drugList = document.getElementById('updateDrugList');
+
+        if (modal && registrationIdInput && modalPatientName && modalServiceName && drugList) {
+            // Isi data ke modal
+            registrationIdInput.value = registrationId;
+            modalPatientName.textContent = patientName;
+            modalServiceName.textContent = serviceName;
+
+            // Kosongkan daftar obat sebelumnya
+            drugList.innerHTML = '';
+
+            // Ambil data resep dari server
+            fetch(`/api/registration/${registrationId}/drugs`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach((drug, index) => {
+                        const drugRow = document.createElement('div');
+                        drugRow.classList.add('drug-item', 'mb-4');
+                        drugRow.innerHTML = `
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label for="drug_id_${index}" class="block text-sm font-medium text-gray-700">Pilih Obat</label>
+                                <select name="drugs[${index}][id]" id="drug_id_${index}" required
+                                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white">
+                                    <option value="${drug.id}" selected>${drug.name}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="quantity_${index}" class="block text-sm font-medium text-gray-700">Jumlah</label>
+                                <input type="number" name="drugs[${index}][quantity]" id="quantity_${index}" value="${drug.quantity}" required
+                                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            </div>
+                            <div>
+                                <label for="dosage_${index}" class="block text-sm font-medium text-gray-700">Dosis</label>
+                                <input type="text" name="drugs[${index}][dosage]" id="dosage_${index}" value="${drug.dosage}" required
+                                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            </div>
+                        </div>
+                    `;
+                        drugList.appendChild(drugRow);
+                    });
+                })
+                .catch(error => console.error('Error fetching drugs:', error));
+
+            // Tampilkan modal
+            modal.classList.remove('hidden');
+        } else {
+            console.error('Modal atau elemen terkait tidak ditemukan.');
+        }
+    }
+
+    function closeUpdateModal() {
+        const modal = document.getElementById('updateResepModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    }
+
     // Pastikan fungsi tersedia di global scope
     window.openEditServiceModal = openEditServiceModal;
+    window.openUpdateModal = openUpdateModal;
     window.openEditPatientModal = openEditPatientModal;
     window.openEditStateModal = openEditStateModal;
     window.openEditCountryModal = openEditCountryModal;
     window.openEditDrugModal = openEditDrugModal;
+    window.closeUpdateModal = closeUpdateModal;
 
     // Fungsi untuk membuka modal view dengan data
     function openViewModal(modalId, data) {

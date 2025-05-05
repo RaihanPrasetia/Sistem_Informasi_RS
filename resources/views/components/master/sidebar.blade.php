@@ -1,14 +1,14 @@
 <div id="sidebar"
     class="fixed top-0 left-0 w-64 h-full bg-gray-50 text-gray-800 shadow-lg transform -translate-x-full transition-transform duration-300">
     <div class="p-4">
-        <h2 class="text-xl font-bold text-center text-gray-700">Inova Medikal</h2>
+        <h2 class="text-xl font-bold text-center text-gray-700">Rumah Sakit</h2>
         <ul class="mt-6">
 
             @php
                 $menus = [
                     ['name' => 'Dashboard', 'route' => route('dashboard.index'), 'icon' => 'fa-solid fa-house'],
                     ['name' => 'Pendaftaran', 'route' => route('register.index'), 'icon' => 'fa-solid fa-file-alt'],
-                    ['name' => 'Transaksi', 'route' => '#', 'icon' => 'fa-solid fa-users'],
+                    ['name' => 'Transaksi', 'route' => route('transaction.index'), 'icon' => 'fa-solid fa-users'],
                     ['name' => 'Peresepan', 'route' => route('peresepan.index'), 'icon' => 'fa-solid fa-users'],
                     ['name' => 'Pasien', 'route' => route('patient.index'), 'icon' => 'fa-solid fa-user'],
                     ['name' => 'Pegawai', 'route' => '#', 'icon' => 'fa-solid fa-users'],

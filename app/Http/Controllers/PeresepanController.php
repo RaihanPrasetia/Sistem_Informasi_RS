@@ -73,7 +73,8 @@ class PeresepanController extends Controller
 
     public function getDrugs($id)
     {
-        $drugs = RegistrationDrug::where('registration_id', $id)
+        // Obat yang sudah dipilih
+        $selectedDrugs = RegistrationDrug::where('registration_id', $id)
             ->with('drug')
             ->get()
             ->map(function ($registrationDrug) {
@@ -85,38 +86,43 @@ class PeresepanController extends Controller
                 ];
             });
 
-        return response()->json($drugs);
+        // Semua obat
+        $allDrugs = Drug::all()->map(function ($drug) {
+            return [
+                'id' => $drug->id,
+                'name' => $drug->name,
+            ];
+        });
+
+        return response()->json([
+            'selectedDrugs' => $selectedDrugs,
+            'allDrugs' => $allDrugs,
+        ]);
     }
 
-    public function update(Request $request,  $peresepan)
+    public function update(Request $request, $id)
     {
-        try {
-            // Validasi input
-            $validated = $request->validate([
-                'drugs' => 'required|array',
-                'drugs.*.id' => 'required|exists:drugs,id',
-                'drugs.*.quantity' => 'required|integer|min:1',
-                'drugs.*.dosage' => 'required|string|max:255',
+        $validated = $request->validate([
+            'registration_id' => 'required|integer|exists:registrations,id',
+            'drugs' => 'required|array',
+            'drugs.*.id' => 'required|exists:drugs,id',
+            'drugs.*.quantity' => 'required|integer|min:1',
+            'drugs.*.dosage' => 'required|string|max:255',
+        ]);
+
+        // Hapus resep lama
+        RegistrationDrug::where('registration_id', $validated['registration_id'])->delete();
+
+        // Tambahkan resep baru
+        foreach ($validated['drugs'] as $drug) {
+            RegistrationDrug::create([
+                'registration_id' => $validated['registration_id'],
+                'drug_id' => $drug['id'],
+                'quantity' => $drug['quantity'],
+                'dosage' => $drug['dosage'],
             ]);
-
-            // Hapus resep lama
-            RegistrationDrug::where('registration_id',  $peresepan)->delete();
-
-            // Tambahkan resep baru
-            foreach ($validated['drugs'] as $drug) {
-                RegistrationDrug::create([
-                    'registration_id' =>  $peresepan,
-                    'drug_id' => $drug['id'],
-                    'quantity' => $drug['quantity'],
-                    'dosage' => $drug['dosage'],
-                ]);
-            }
-
-            return redirect()->route('peresepan.index')->with('success', 'Resep berhasil diperbarui.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->withErrors($e->validator)->withInput();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui resep: ' . $e->getMessage())->withInput();
         }
+
+        return redirect()->route('peresepan.index')->with('success', 'Resep berhasil diperbarui.');
     }
 }

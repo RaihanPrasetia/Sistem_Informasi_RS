@@ -28,16 +28,18 @@
             @include('components.modal.peresepan.add')
 
             <!-- Tabel Data Pendaftaran -->
-            <table class="min-w-full border border-gray-200">
-                <thead class="bg-gray-50 text-gray-600">
+            <table>
+                <thead>
                     <tr>
-                        <th class="px-4 py-2 text-left">#</th>
-                        <th class="px-4 py-2 text-left">Nama Pasien</th>
-                        <th class="px-4 py-2 text-left">Nomor Pasien</th>
-                        <th class="px-4 py-2 text-left">Layanan</th>
-                        <th class="px-4 py-2 text-left">Obat-obatan</th>
-                        <th class="px-4 py-2 text-left">Tanggal Pendaftaran</th>
-                        <th class="px-4 py-2 text-center">Aksi</th>
+                        <th>#</th>
+                        <th>Nama Pasien</th>
+                        <th>Nomor Pasien</th>
+                        <th>Layanan</th>
+                        <th>Obat-obatan</th>
+                        <th>Tanggal Pendaftaran</th>
+                        <th>
+                            <p class="text-center">Aksi</p>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">

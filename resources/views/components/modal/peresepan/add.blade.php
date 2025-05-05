@@ -19,38 +19,47 @@
                 <!-- Daftar Obat -->
                 <div id="drugList">
                     <div class="drug-item mb-4">
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="flex justify-center items-end space-x-2">
                             <!-- Pilih Obat -->
-                            <div>
-                                <label for="drug_id" class="block text-sm font-medium text-gray-700">Pilih Obat</label>
-                                <select name="drugs[0][id]" required
+                            <div class="w-full">
+                                <label for="drug_id_0" class="block text-sm font-medium text-gray-700">Pilih
+                                    Obat</label>
+                                <select name="drugs[0][id]" id="drug_id_0" required
                                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white">
                                     <option value="" disabled selected>Pilih Obat</option>
                                     @foreach ($drugs as $drug)
-                                        <option value="{{ $drug->id }}">{{ $drug->name }}</option>
+                                        <option value="{{ $drug->id }}">{{ $drug->name }} - {{ $drug->type }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <!-- Jumlah -->
                             <div>
-                                <label for="quantity" class="block text-sm font-medium text-gray-700">Jumlah</label>
-                                <input type="number" name="drugs[0][quantity]" required
+                                <label for="quantity_0" class="block text-sm font-medium text-gray-700">Jumlah</label>
+                                <input type="number" name="drugs[0][quantity]" id="quantity_0" required
                                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
                                     placeholder="Masukkan jumlah obat">
                             </div>
 
                             <!-- Dosis -->
                             <div>
-                                <label for="dosage" class="block text-sm font-medium text-gray-700">Dosis</label>
-                                <input type="text" name="drugs[0][dosage]" required
+                                <label for="dosage_0" class="block text-sm font-medium text-gray-700">Dosis</label>
+                                <input type="text" name="drugs[0][dosage]" id="dosage_0" required
                                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
                                     placeholder="Masukkan dosis obat">
                             </div>
+
+                            <!-- Tombol Delete -->
+                            <div>
+                                <button type="button" onclick="deleteDrugRow(this)"
+                                    class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">Hapus</button>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
-
                 <!-- Tombol Tambah Obat -->
                 <div class="mb-4">
                     <button type="button" onclick="addDrugRow()"
@@ -69,7 +78,7 @@
     </div>
 </div>
 
-<div id="updateResepModal" class="fixed inset-0 hidden bg-gray-900/50 flex items-center justify-center z-50">
+<div id="updateResepModal" class="fixed inset-0 hidden bg-gray-900/50 items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl">
         <div class="flex justify-between items-center border-b p-4">
             <h3 class="text-lg font-semibold">Update Resep</h3>
@@ -121,15 +130,15 @@
         const newDrugRow = document.createElement('div');
         newDrugRow.classList.add('drug-item', 'mb-4');
         newDrugRow.innerHTML = `
-        <div class="grid grid-cols-3 gap-4">
+        <div class="flex justify-evenly items-end space-x-2">
             <!-- Pilih Obat -->
-            <div>
+            <div class="w-full">
                 <label for="drug_id_${drugIndex}" class="block text-sm font-medium text-gray-700">Pilih Obat</label>
                 <select name="drugs[${drugIndex}][id]" id="drug_id_${drugIndex}" required
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white">
                     <option value="" disabled selected>Pilih Obat</option>
                     @foreach ($drugs as $drug)
-                        <option value="{{ $drug->id }}">{{ $drug->name }}</option>
+                        <option value="{{ $drug->id }}">{{ $drug->name }} - {{ $drug->type }}</option>
                     @endforeach
                 </select>
             </div>
@@ -149,6 +158,12 @@
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
                     placeholder="Masukkan dosis obat">
             </div>
+
+              <!-- Tombol Delete -->
+             <div class="text-right flex items-center justify-center mb-0">
+                            <button type="button" onclick="deleteDrugRow(this)"
+                                class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">Hapus</button>
+              </div>
         </div>
     `;
         drugList.appendChild(newDrugRow);
@@ -171,11 +186,21 @@
             // Kosongkan daftar obat sebelumnya
             drugList.innerHTML = '';
 
-            // Ambil data resep dari server
+            // Ambil data resep dan semua obat dari server
             fetch(`/api/registration/${registrationId}/drugs`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    data.forEach((drug, index) => {
+                    const {
+                        selectedDrugs,
+                        allDrugs
+                    } = data;
+
+                    selectedDrugs.forEach((drug, index) => {
                         const drugRow = document.createElement('div');
                         drugRow.classList.add('drug-item', 'mb-4');
                         drugRow.innerHTML = `
@@ -184,7 +209,11 @@
                                 <label for="drug_id_${index}" class="block text-sm font-medium text-gray-700">Pilih Obat</label>
                                 <select name="drugs[${index}][id]" id="drug_id_${index}" required
                                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white">
-                                    <option value="${drug.id}" selected>${drug.name}</option>
+                                    ${allDrugs.map(drugOption => `
+                                        <option value="${drugOption.id}" ${drugOption.id === drug.id ? 'selected' : ''}>
+                                            ${drugOption.name}
+                                        </option>
+                                    `).join('')}
                                 </select>
                             </div>
                             <div>
@@ -197,6 +226,12 @@
                                 <input type="text" name="drugs[${index}][dosage]" id="dosage_${index}" value="${drug.dosage}" required
                                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
                             </div>
+                        </div>
+
+                        <!-- Tombol Delete -->
+                        <div class="mt-2 text-right">
+                            <button type="button" onclick="deleteDrugRow(this)"
+                                class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">Hapus</button>
                         </div>
                     `;
                         drugList.appendChild(drugRow);
@@ -241,6 +276,13 @@
         const modal = document.getElementById('addResepModal');
         if (modal) {
             modal.classList.add('hidden');
+        }
+    }
+
+    function deleteDrugRow(button) {
+        const drugRow = button.closest('.drug-item');
+        if (drugRow) {
+            drugRow.remove();
         }
     }
 </script>
